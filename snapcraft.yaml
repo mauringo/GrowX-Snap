@@ -1,0 +1,78 @@
+name: growx
+version: '0.3'
+summary: you can grow your business with us
+description: python edge ( psutils, bluepy )
+confinement: devmode
+grade: stable
+
+    
+apps:
+  python-bluepy: 
+    command: sh $SNAP/bin/run.sh  
+    plugs: [network, network-bind, mount-observe, network-observe, system-observe, bluetooth-control]
+    daemon: simple
+
+  run: 
+    command: sh $SNAP/bin/run.sh  
+    plugs: [network, network-bind, mount-observe, network-observe, system-observe, bluetooth-control]
+
+  info: 
+    command: sh $SNAP/bin/info.sh  
+    plugs: [network, network-bind, mount-observe, network-observe, system-observe, bluetooth-control]
+
+parts:
+
+
+  pymongo-part:
+    plugin: python
+    python-packages: [pymongo]
+    build-packages:
+      - python3-dev 
+      - build-essential
+   
+
+  influxdb-part:
+    plugin: python
+    python-packages: [influxdb]
+    build-packages:
+      - python3-dev
+      - build-essential
+   
+
+  paho-mqtt-part:
+    plugin: python
+    python-packages: [paho-mqtt]
+    build-packages:
+      - python3-dev
+      - build-essential
+
+  bluepy:
+    plugin: python
+    python-version: python3
+    source: https://github.com/IanHarvey/bluepy
+    source-type: git
+    build-packages: [libglib2.0-dev]
+
+  miflora:
+    plugin: python
+    python-packages: [miflora]
+    build-packages:
+      - python3-dev
+      - build-essential
+    
+   
+
+  publish:
+    plugin: copy
+    files:
+      ./info.sh     : bin/info.sh
+      ./run.sh      : bin/run.sh
+      ./pythoncode/app.py      : bin/pythoncode/app.py
+      ./pythoncode/scanBLE.py      : bin/pythoncode/scanBLE.py
+      ./pythoncode/InfluxMeasurement2.py      : bin/pythoncode/InfluxMeasurement2.py
+      ./pythoncode/pant.json      : bin/pythoncode/pant.json
+      ./pythoncode/NewSensors.json    : bin/pythoncode/NewSensors.json
+      ./pythoncode/PollingList.json      : bin/pythoncode/PollingList.json 
+      ./mitemp_bt/mitemp_bt_poller.py : /lib/python3.5/site-packages/mitemp_bt/mitemp_bt_poller.py
+      ./mitemp_bt/__init__.py : /lib/python3.5/site-packages/mitemp_bt/__init__.py
+
