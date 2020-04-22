@@ -25,6 +25,7 @@ parts:
 
   pymongo-part:
     plugin: python
+    python-version: python3
     python-packages: [pymongo]
     build-packages:
       - python3-dev 
@@ -33,6 +34,7 @@ parts:
 
   influxdb-part:
     plugin: python
+    python-version: python3
     python-packages: [influxdb]
     build-packages:
       - python3-dev
@@ -55,24 +57,32 @@ parts:
 
   miflora:
     plugin: python
+    python-version: python3
     python-packages: [miflora]
     build-packages:
       - python3-dev
       - build-essential
-    
-   
 
-  publish:
-    plugin: copy
-    files:
-      ./info.sh     : bin/info.sh
-      ./run.sh      : bin/run.sh
-      ./pythoncode/app.py      : bin/pythoncode/app.py
-      ./pythoncode/scanBLE.py      : bin/pythoncode/scanBLE.py
-      ./pythoncode/InfluxMeasurement2.py      : bin/pythoncode/InfluxMeasurement2.py
-      ./pythoncode/pant.json      : bin/pythoncode/pant.json
-      ./pythoncode/NewSensors.json    : bin/pythoncode/NewSensors.json
-      ./pythoncode/PollingList.json      : bin/pythoncode/PollingList.json 
-      ./mitemp_bt/mitemp_bt_poller.py : /lib/python3.5/site-packages/mitemp_bt/mitemp_bt_poller.py
-      ./mitemp_bt/__init__.py : /lib/python3.5/site-packages/mitemp_bt/__init__.py
+  apython-libs:  
+    source: ./lib/
+    plugin: dump
+    organize:
+      '*': /lib/python3.5/site-packages/
 
+  apython-code:  
+    source: ./pythoncode/
+    plugin: dump
+    organize:
+      '*': bin/pythoncode/
+
+  a-shscripts:  
+    source: ./shscripts/
+    plugin: dump
+    organize:
+      '*': bin/
+
+  
+  
+
+
+  
