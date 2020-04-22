@@ -1,5 +1,5 @@
 name: growx
-version: '0.3'
+version: '0.4'
 summary: you can grow your business with us
 description: python edge ( psutils, bluepy )
 confinement: devmode

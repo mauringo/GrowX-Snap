@@ -1,162 +1,177 @@
-'''from bluepy.btle import Scanner, DefaultDelegate
-
-class ScanDelegate(DefaultDelegate):
-    def __init__(self):
-        DefaultDelegate.__init__(self)
-
-    def handleDiscovery(self, dev, isNewDev, isNewData):
-        if isNewDev:
-            print( "Discovered device", dev.addr)
-        elif isNewData:
-            print ("Received new data from", dev.addr)
-
-scanner = Scanner().withDelegate(ScanDelegate())
-devices = scanner.scan(10.0)
-
-for dev in devices:
-    if(dev.addr=="58:2d:34:35:24:7b"):
-   	 print ("Device %s (%s), RSSI=%d dB, " % (dev.addr, dev.addrType,dev.rssi))
-   	 for (adtype, desc, value) in dev.getScanData():
-       	      print ( desc+" "+ value+" "+str(adtype)+" "+str("ffffe0e83e94490e"==value)  )
-
-
-
-
-
-
-
-'''
-import scanBLE
-import InfluxMeasurement2
+import os
 import time
-import paho.mqtt.client as mqtt
 import json
 
-import os
-
-#path = "/home/mauro/pythonMauro"
-
-# Check current working directory.
-#retval = os.getcwd()
-#print ("Current working directory %s" % retval)
-
-# Now change the directory
-#os.chdir( path )
+import scan_BLE as Scanner
+import influx_measure
+from influx_measure import SystemPoller
+import paho.mqtt.client as mqtt
+from file_mngr import pl_find
 
 
-client = mqtt.Client("python2")
-broker = "127.0.0.1"
+_BROKER = "127.0.0.1"
 
- 
-ScanninAlready=False
-PairingAlready=False
-whichPlant = 1
+_SCANNINGALREADY = False
+_PAIRINGALREADY = False
 
-checkList= []
 
 def scanning():
-    global ScanninAlready
-    a=scanBLE.sensorsScan.startScan()
-    client.publish("scannumber", payload=a, qos=2)
-    ScanninAlready= False
-    return a
 
-def pairing():
-    global wichPlant
-    print("Pairing "+wichPlant)
-    a=scanBLE.sensorsScan.saveNewDevice()
-    client.publish("tobepaired", payload=a, qos=2)
-    return a
+    global _SCANNINGALREADY
 
-def onConnect(Client, userdate, flag, rc):
+    newListLen= Scanner.startScan()
+    client.publish("scannumber", payload= newListLen, qos=2)
+    _SCANNINGALREADY = False
+
+    return newListLen
+
+def pairing(whichPlant):
+
+    print("Pairing "+ whichPlant)
+
+    newListLen =Scanner.saveNewDevice()
+    client.publish("tobepaired", payload= newListLen, qos=2)
+    
+    return newListLen
+
+def onConnect(client, userdata, flag, rc):
+    
+
     client.subscribe(topic="Scan",qos=2)
     client.subscribe(topic="Pair",qos=2)
-    client.subscribe(topic="wichplant",qos=2)
+    client.subscribe(topic="whichPlant",qos=2)
     client.subscribe(topic="PairThermo",qos=2)
-    client.subscribe(topic="wichplant",qos=2)
+    client.subscribe(topic="whichPlant",qos=2)
     client.subscribe(topic="Polling",qos=2)
     client.subscribe(topic="remall",qos=2)
-
+    
 
 def onMessage(client, userdata, message):
-    global ScanninAlready
-    global PairingAlready
-    global wichPlant
+    
+    """TOPICS LIST
+        -remall
+        -PairThermo
+        -Pair
+        -Polling
+    """    
+    
+    global _SCANNINGALREADY
+    global _PAIRINGALREADY
+
+    global Poller 
+
+    """TOPIC REMALL"""
 
     if  message.topic=="remall":
-        InfluxMeasurement2.SystemPoller.Stop()
+        print("I have received"+" "+message.topic)
+        Poller.stop()
         Data={}
         Data['sensors']=[]
         Data['plants']=[]
         Data['thermos']=[]
-        with open("PollingList.json", 'w', encoding='utf-8') as f:
+        with open('Payloads/PollingList.json', 'w', encoding='utf-8') as f:
                 json.dump(Data, f, ensure_ascii=False, indent=4)  
+ 
 
-    if  message.topic=="PairThermo" and not PairingAlready and not ScanninAlready:
+    
+    """TOPIC PAIRTHERMO"""
+
+    if  message.topic=="PairThermo" and not _PAIRINGALREADY and not _SCANNINGALREADY:
+        print("I have received"+" "+message.topic)
         Data={}
-        with open('PollingList.json', 'r') as fh:
+        with open('Payloads/PollingList.json', 'r') as fh:
             Data = json.load(fh)
-        PollingList=Data['sensors']
+        # PollingList=Data['sensors']
         PlantList=Data['plants']
         ThermoList=Data['thermos']
         if(len(ThermoList)==0):
-            InfluxMeasurement2.SystemPoller.Stop()
-            a=scanBLE.sensorsScan.scanForNewThermo()
-            if(a>0):
-                client.publish("ThermoResult", payload="Paired", qos=2)
-            if(a==0):
-                client.publish("ThermoResult", payload="Not Found", qos=2)
-            PairingAlready = True
+            Poller.stop()
+            thermoCount = Scanner.scanForNewThermo()
+
+            if(thermoCount>0):
+                client.publish("ThermoResult", payload="Thermometer Paired", qos=2)
+            if(thermoCount==0):
+                client.publish("ThermoResult", payload="Thermometer Not Found", qos=2)
+
+            _PAIRINGALREADY = True
             print("scanning")
-            InfluxMeasurement2.SystemPoller.Start()
-            PairingAlready = False
+
+            Poller.start()
+            _PAIRINGALREADY = False
         else:
             client.publish("ThermoResult", payload="There is already a thermometer paired", qos=2)
 
-    if  message.topic=="Pair" and not PairingAlready and not ScanninAlready:
-        Data2={}
-        Data={}
-        with open('PollingList.json', 'r') as fh:
-            Data = json.load(fh)
-        PollingList=Data['sensors']
-        PlantList=Data['plants']
-        ThermoList=Data['thermos']
-        wichPlant = str(message.payload.decode('UTF-8'))
-        if(wichPlant in PlantList):
-            s=wichPlant+" has already a sensor"
-            client.publish("FloraResult", payload=s, qos=2)
-        else:
-            print("Plat to be recorded"+wichPlant)
-            Data2['plants']=wichPlant
-            with open("pant.json", 'w', encoding='utf-8') as f:
-                    json.dump(Data2, f, ensure_ascii=False, indent=4)
-            InfluxMeasurement2.SystemPoller.Stop()
-            PairingAlready = True
-            print("scanning")
-            a=scanning()
-            print("pairing")
-            b=pairing()
-            if(a==b):
-                client.publish("FloraResult", payload="Not Paired", qos=2)
-            if(a>b):
-                client.publish("FloraResult", payload="CONNECTED", qos=2)
-            InfluxMeasurement2.SystemPoller.Start()
-            PairingAlready = False
+    """TOPIC PAIR"""
 
+
+    if  message.topic=="Pair":
+        print("I have received"+" "+message.topic)
+        if not _PAIRINGALREADY and not _SCANNINGALREADY:
+
+            Data={}
+            with open('Payloads/PollingList.json', 'r') as fh:
+                Data = json.load(fh)
+            # PollingList=Data['sensors']
+            PlantList=Data['plants']
+            ThermoList=Data['thermos']
+            
+            whichPlant = str(message.payload.decode('UTF-8'))
+
+            if whichPlant in PlantList:
+                s = whichPlant + " has already a sensor"
+                client.publish("FloraResult", payload = s, qos = 2)
+            else:
+                print("Plant to be recorded" + whichPlant)
+                Data.clear()
+                Data['plants']=whichPlant
+                with open("Payloads/Plants.json", 'w', encoding='utf-8') as f:
+                        json.dump(Data, f, ensure_ascii = False, indent = 4)
+
+                Poller.stop()
+                _PAIRINGALREADY = True
+                print("scanning")
+                scannedPlantListLen = scanning()
+                print("pairing")
+                PairedPlantListLen=pairing(whichPlant)
+
+                if scannedPlantListLen == PairedPlantListLen:
+                    client.publish("FloraResult", payload="Plant Not Paired", qos=2)
+                if scannedPlantListLen>PairedPlantListLen:
+                    client.publish("FloraResult", payload="Plant Paired", qos=2)
+
+                Poller.start()
+                _PAIRINGALREADY = False
+
+        elif _PAIRINGALREADY:
+            client.publish("FloraResult", payload = "Already in Pairing mode")
+        elif _SCANNINGALREADY:
+            client.publish("FloraResult", payload = "Already in Scanning mode")      
+
+    """POLLING"""
+    
     if  message.topic=="Polling":
+
         print("III")
-        if  InfluxMeasurement2.ImPolling == False:
-            InfluxMeasurement2.SystemPoller.Start()
+        if  Poller.ImPolling == False():
+            Poller.start()
         else:
-            InfluxMeasurement2.SystemPoller.Stop()
-            InfluxMeasurement2.SystemPoller.Start()
+            Poller.stop()
+            Poller.start()
 
 
-   
-client.connect_async(broker)
 
+
+Poller = SystemPoller()
+
+def main():
+    Scanner.getDongleNumber()
+    Poller.start()
+
+if __name__=="__main__":
+    main()
+
+client = mqtt.Client("python2")
+client.connect_async(_BROKER)
 client.on_connect = onConnect
 client.on_message = onMessage
-
 client.loop_forever()
-
