@@ -1,0 +1,2 @@
+ sudo dd if=/home/mauro/daje.img of=/dev/sda bs=1M status=progress
+

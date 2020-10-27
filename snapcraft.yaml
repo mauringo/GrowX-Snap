@@ -1,17 +1,31 @@
 name: growx
-version: '0.4'
-summary: you can grow your business with us
+version: '0.2'
+base: core18
+summary: Grow your plant and your Business
 description: python edge ( psutils, bluepy )
 confinement: devmode
 grade: stable
 
     
 apps:
-  python-bluepy: 
+
+  desktop-launch:
+    command: bin/desktop-launch
+    plugs:
+      - desktop
+
+  growx-daemon: 
     command: sh $SNAP/bin/run.sh  
     plugs: [network, network-bind, mount-observe, network-observe, system-observe, bluetooth-control]
     daemon: simple
-
+    restart-condition: on-failure
+    
+  flask-daemon: 
+    command: sh $SNAP/bin/flask.sh  
+    plugs: [network, network-bind, mount-observe, network-observe, system-observe, bluetooth-control]
+    daemon: simple
+    restart-condition: on-failure
+    
   run: 
     command: sh $SNAP/bin/run.sh  
     plugs: [network, network-bind, mount-observe, network-observe, system-observe, bluetooth-control]
@@ -43,7 +57,16 @@ parts:
 
   paho-mqtt-part:
     plugin: python
+    python-version: python3
     python-packages: [paho-mqtt]
+    build-packages:
+      - python3-dev
+      - build-essential
+      
+  flask-part:
+    plugin: python
+    python-version: python3
+    python-packages: [flask]
     build-packages:
       - python3-dev
       - build-essential
@@ -63,19 +86,19 @@ parts:
       - python3-dev
       - build-essential
 
-  apython-libs:  
+  python-libs:  
     source: ./lib/
     plugin: dump
     organize:
-      '*': /lib/python3.5/site-packages/
+      '*': /lib/python3.6/site-packages/
 
-  apython-code:  
+  python-code:  
     source: ./pythoncode/
     plugin: dump
     organize:
       '*': bin/pythoncode/
 
-  a-shscripts:  
+  shscripts:  
     source: ./shscripts/
     plugin: dump
     organize:

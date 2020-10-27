@@ -1,6 +1,6 @@
 #!/bin/bash
 
-
+sleep 10
 
 path="/home/$(ls /home)"
 

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+    <meta charset="UTF-8">
+    <meta name="description" content="Python Project Uploader"/>
+    <meta name="author" content="Ringo"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Demo WebConnector with Bootstrap - Together</title>
+   
+    <!-- Import favicon -->
+    <link rel="icon" href="./assets/logo.png"/>
+    <!-- Import stylesheets -->
+  
+    <link rel="stylesheet" type="text/css" href="./libs/bootstrap-4.4.1-dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="./css/style.css"/>
+    <!-- Import library scripts -->
+    <script src="./libs/jquery-3.4.1.min.js"></script>
+    <script src="./libs/popper.min.js"></script>
+    <script src="./libs/bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
+    <script src="./js/scrpts.js"></script>
+
+  </head>
+  <body onload="iframe2()">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+   
+          <a class="nav-link" onclick="window.location.href = '/';" href="#">Home </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" onclick="window.location.href = '/howtostart';" href="#">How to start<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-item nav-link active" onclick="window.location.href = '/settings';" href="#">Settings<span class="sr-only">(current)</span></a>
+          </li>
+        </ul>
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" onclick="window.location.href = 'https://growx.dev/aboutus.html';" target="_blank" href="#">about</a>
+          </li>
+        </ul>
+      </nav>
+   
+    <div class="container-fluid">
+        <div class="row">
+          <div class="embed-responsive embed-responsive-1by1">
+        <iframe id="scr2" class="embed-responsive-item" src="http://localhost:1880/"></iframe>
+          </div>
+      </div>
+    </div>
+    
+    
+  </body>
+</html>

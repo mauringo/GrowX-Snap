@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=GrowX 
+Comment=Low-code programming for event-driven applications
+Exec=growx.desktop-launch
+Icon=${SNAP}/meta/gui/growx.png
+Terminal=false
+Categories=Development;
