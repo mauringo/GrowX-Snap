@@ -15,7 +15,7 @@ apps:
       - desktop
 
   growx-daemon: 
-    command: sh $SNAP/bin/run.sh  
+    command: sh $SNAP/bin/run.sh
     plugs: [network, network-bind, mount-observe, network-observe, system-observe, bluetooth-control]
     daemon: simple
     restart-condition: on-failure
@@ -27,7 +27,7 @@ apps:
     restart-condition: on-failure
     
   run: 
-    command: sh $SNAP/bin/run.sh  
+    command: sh $SNAP/bin/run.sh 
     plugs: [network, network-bind, mount-observe, network-observe, system-observe, bluetooth-control]
 
   info: 

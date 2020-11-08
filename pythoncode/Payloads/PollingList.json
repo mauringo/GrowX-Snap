@@ -1,13 +1,5 @@
 {
-    "sensors": [
-        "80:ea:ca:89:00:10",
-        "c4:7c:8d:63:80:24"
-    ],
-    "plants": [
-        "Plant1",
-        "Plant2"
-    ],
-    "thermos": [
-        "58:2d:34:35:24:7b"
-    ]
+    "sensors": [],
+    "plants": [],
+    "thermos": []
 }
