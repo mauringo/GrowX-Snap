@@ -14,24 +14,47 @@ apps:
     plugs:
       - desktop
 
+  webserver: 
+    command: bin/runserver.sh 
+    daemon: simple
+    restart-condition: always
+    plugs: [network, network-bind, mount-observe, network-observe, system-observe, bluetooth-control]
+
   growx-daemon: 
-    command: sh $SNAP/bin/run.sh
-    plugs: [network, network-bind, mount-observe, network-observe, system-observe, bluetooth-control]
+    command: bin/run.sh
     daemon: simple
-    restart-condition: on-failure
+    restart-condition: always
+    plugs: [network, network-bind, mount-observe, network-observe, system-observe, bluetooth-control]
+
     
-  flask-daemon: 
-    command: sh $SNAP/bin/flask.sh  
-    plugs: [network, network-bind, mount-observe, network-observe, system-observe, bluetooth-control]
-    daemon: simple
-    restart-condition: on-failure
+  
+  influxd:
+        command: bin/runinfluxd.sh
+        plugs: [network, network-bind]
+        daemon: simple
+        restart-condition: always
+        environment:
+          INFLUXDB_META_DIR: $SNAP_DATA/meta
+          INFLUXDB_DATA_DIR: $SNAP_DATA/data
+          INFLUXDB_DATA_WAL_DIR: $SNAP_DATA/wal
+          INFLUXDB_CONFIG_PATH: $SNAP_DATA/conf/influxdb.conf
+          INFLUXD_BOLT_PATH: $SNAP_DATA/influxdbv2/influxd.bolt
+          INFLUXD_ENGINE_PATH: $SNAP_DATA/influxdbv2/engine
+
+  influx:
+        command: usr/bin/influx
+        plugs: [network, network-bind]
+        
+  default-client:
+        command: bin/defaultclient.sh
+        plugs: [network, network-bind]
     
   run: 
-    command: sh $SNAP/bin/run.sh 
+    command: bin/run.sh 
     plugs: [network, network-bind, mount-observe, network-observe, system-observe, bluetooth-control]
 
   info: 
-    command: sh $SNAP/bin/info.sh  
+    command: bin/info.sh  
     plugs: [network, network-bind, mount-observe, network-observe, system-observe, bluetooth-control]
 
 parts:
@@ -85,6 +108,30 @@ parts:
     build-packages:
       - python3-dev
       - build-essential
+      
+  influxdb:
+        plugin: dump
+        source:
+         - on amd64: https://dl.influxdata.com/influxdb/releases/influxdb_1.8.3_amd64.deb
+         - on arm64: https://dl.influxdata.com/influxdb/releases/influxdb_1.8.3_arm64.deb
+        stage-packages:
+            - libssl1.1
+            - libcurl3-dev
+            - libcurl4-openssl-dev
+
+  node-edge-platform:
+    plugin: nodejs
+    source: .
+  
+  
+  node-code:  
+    source: ./node-code/
+    plugin: dump
+    organize:
+      '*': bin/
+
+  
+
 
   python-libs:  
     source: ./lib/

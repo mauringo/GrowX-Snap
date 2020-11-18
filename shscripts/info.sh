@@ -1,11 +1,7 @@
 #!/bin/bash
 
-echo $HOME
-echo $USER
-env
+echo "The Snap configuration files are stored in: /var/snap/mongo44-configurable/buildVersion/mongodb.conf"
 
-path="/home/$(ls /home)"
-echo $path
 exit 0
 
 

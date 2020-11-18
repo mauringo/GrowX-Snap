@@ -1,26 +1,32 @@
+from flask import Flask, redirect, render_template, request, session, url_for, Response
 import os
 import time
 import json
-
 import scan_BLE as Scanner
 import influx_measure
 from influx_measure import SystemPoller
-import paho.mqtt.client as mqtt
+from threading import Thread
 from file_mngr import pl_find
 
 
-_BROKER = "127.0.0.1"
+dir_path = os.path.dirname(os.path.realpath(__file__))
+print(dir_path+"/uploads")
+app = Flask(__name__, static_url_path='')
+
+
+
+os.chdir(dir_path)
 
 _SCANNINGALREADY = False
 _PAIRINGALREADY = False
-
-
+_PLANTSSCANNED = 0
+_THERMOCOUNT = 0
 def scanning():
 
     global _SCANNINGALREADY
 
     newListLen= Scanner.startScan()
-    client.publish("scannumber", payload= newListLen, qos=2)
+
     _SCANNINGALREADY = False
 
     return newListLen
@@ -30,133 +36,171 @@ def pairing(whichPlant):
     print("Pairing "+ whichPlant)
 
     newListLen =Scanner.saveNewDevice()
-    client.publish("tobepaired", payload= newListLen, qos=2)
     
+
     return newListLen
 
-def onConnect(client, userdata, flag, rc):
-    
 
-    client.subscribe(topic="Scan",qos=2)
-    client.subscribe(topic="Pair",qos=2)
-    client.subscribe(topic="whichPlant",qos=2)
-    client.subscribe(topic="PairThermo",qos=2)
-    client.subscribe(topic="whichPlant",qos=2)
-    client.subscribe(topic="Polling",qos=2)
-    client.subscribe(topic="remall",qos=2)
-    
+def pairThermoThread():   
+    global _THERMOCOUNT, _PAIRINGALREADY,_SCANNINGALREADY
+    Poller.stop()
+    _PAIRINGALREADY = True
+    _THERMOCOUNT = Scanner.scanForNewThermo()
+    _PAIRINGALREADY = False
+    _SCANNINGALREADY = False
 
-def onMessage(client, userdata, message):
-    
-    """TOPICS LIST
-        -remall
-        -PairThermo
-        -Pair
-        -Polling
-    """    
-    
+    Poller.start()
+
+def pairFloraThread(whichPlant): 
+    global _PLANTSSCANNED, _PAIRINGALREADY    
+    Data={}   
+    Poller.stop()
+    _PAIRINGALREADY = True
+    print("scanning")
+    _PLANTSSCANNED = scanning()
+    print("pairing")
+    Data.clear()
+    Data['plants']=whichPlant
+    with open("Payloads/Plants.json", 'w', encoding='utf-8') as f:
+            json.dump(Data, f, ensure_ascii = False, indent = 4)
+    _PLANTSSCANNED=pairing(whichPlant)
+    Poller.start()
+    _PAIRINGALREADY = False
+    _SCANNINGALREADY = False
+
+
+#rest API functions
+
+@app.route('/remall',methods=['GET', 'POST'])
+def remall():              
     global _SCANNINGALREADY
     global _PAIRINGALREADY
-
     global Poller 
 
-    """TOPIC REMALL"""
-
-    if  message.topic=="remall":
-        print("I have received"+" "+message.topic)
-        Poller.stop()
-        Data={}
-        Data['sensors']=[]
-        Data['plants']=[]
-        Data['thermos']=[]
-        with open('Payloads/PollingList.json', 'w', encoding='utf-8') as f:
-                json.dump(Data, f, ensure_ascii=False, indent=4)  
- 
-
+    print("I have received Remove All Sensors")
+    Poller.stop()
+    Data={}
+    Data['sensors']=[]
+    Data['plants']=[]
+    Data['thermos']=[]
+    with open('Payloads/PollingList.json', 'w', encoding='utf-8') as f:
+        json.dump(Data, f, ensure_ascii=False, indent=4)  
     
-    """TOPIC PAIRTHERMO"""
+    return ("All sensors removed")
 
-    if  message.topic=="PairThermo" and not _PAIRINGALREADY and not _SCANNINGALREADY:
-        print("I have received"+" "+message.topic)
+
+@app.route('/pairthermo',methods=['GET', 'POST'])
+def pairThermo():
+    global _SCANNINGALREADY
+    global _PAIRINGALREADY
+    global Poller 
+    info={}
+    if  not _PAIRINGALREADY and not _SCANNINGALREADY:
+        print("I have received Thermo")
+        Data={}
+        with open('Payloads/PollingList.json', 'r') as fh:
+            Data = json.load(fh)
+        PlantList=Data['plants']
+        ThermoList=Data['thermos']
+        if(len(ThermoList)==0): 
+                  
+            myScanner = Thread(target=pairThermoThread)
+            myScanner.start()
+            s="Scan started"
+            info['status']=s
+            print(s)
+            resp = json.dumps(info)
+            return resp
+        else:
+            s="Thermo already paired"
+            info['status']=s
+            print(s)
+            resp = json.dumps(info)
+            return resp
+    s="i am already pairing"
+    info['status']=s
+    print(s)
+    resp = json.dumps(info)
+    return resp
+            
+
+
+
+@app.route('/pairflora',methods=['GET', 'POST'])
+def PairFlora():
+
+    global _SCANNINGALREADY
+    global _PAIRINGALREADY
+    global Poller 
+
+    info={}
+    print("I have received PairFlora")
+    if not _PAIRINGALREADY and not _SCANNINGALREADY:
+    
+   
         Data={}
         with open('Payloads/PollingList.json', 'r') as fh:
             Data = json.load(fh)
         # PollingList=Data['sensors']
         PlantList=Data['plants']
         ThermoList=Data['thermos']
-        if(len(ThermoList)==0):
-            Poller.stop()
-            thermoCount = Scanner.scanForNewThermo()
-
-            if(thermoCount>0):
-                client.publish("ThermoResult", payload="Thermometer Paired", qos=2)
-            if(thermoCount==0):
-                client.publish("ThermoResult", payload="Thermometer Not Found", qos=2)
-
-            _PAIRINGALREADY = True
-            print("scanning")
-
-            Poller.start()
-            _PAIRINGALREADY = False
+        
+        whichPlant = str(request.data.decode('UTF-8'))
+        print (whichPlant)
+        str(request.data.decode('UTF-8'))
+        if whichPlant in PlantList:
+            s = whichPlant + " has already a sensor"
+            print(s)
+            info['status']=s
+            resp = json.dumps(info)
+            return resp
         else:
-            client.publish("ThermoResult", payload="There is already a thermometer paired", qos=2)
+            myScanner = Thread(target=pairFloraThread,args=(whichPlant,)) 
+            myScanner.start()
+            s="Plant to be recorded" + whichPlant
+            info['status']=s
+            print(s)
+            resp = json.dumps(info)
+            return resp
 
-    """TOPIC PAIR"""
+    elif _PAIRINGALREADY:
+        s="Already in Pairing mode"
+        info['status']=s
+        print(s)
+        resp = json.dumps(info)
+        return resp
+    elif _SCANNINGALREADY:
+        s="Already in Scanning mode"
+        print(s)
+        info['status']=s
+        resp = json.dumps(info)
+        return resp
 
+@app.route('/info',methods=['GET', 'POST'])
+def info():
+    global _SCANNINGALREADY
+    global _PAIRINGALREADY
+    status='Polling'
+    bpairing=False
+    info={}
+    with open('Payloads/PollingList.json', 'r') as fh:
+            Data = json.load(fh)
+        # PollingList=Data['sensors']
+    PlantList=Data['plants']
+    ThermoList=Data['thermos']
 
-    if  message.topic=="Pair":
-        print("I have received"+" "+message.topic)
-        if not _PAIRINGALREADY and not _SCANNINGALREADY:
+    if (_PAIRINGALREADY or _SCANNINGALREADY):
+        status='Pairing'
+        bpairing=True
 
-            Data={}
-            with open('Payloads/PollingList.json', 'r') as fh:
-                Data = json.load(fh)
-            # PollingList=Data['sensors']
-            PlantList=Data['plants']
-            ThermoList=Data['thermos']
-            
-            whichPlant = str(message.payload.decode('UTF-8'))
-
-            if whichPlant in PlantList:
-                s = whichPlant + " has already a sensor"
-                client.publish("FloraResult", payload = s, qos = 2)
-            else:
-                print("Plant to be recorded" + whichPlant)
-                Data.clear()
-                Data['plants']=whichPlant
-                with open("Payloads/Plants.json", 'w', encoding='utf-8') as f:
-                        json.dump(Data, f, ensure_ascii = False, indent = 4)
-
-                Poller.stop()
-                _PAIRINGALREADY = True
-                print("scanning")
-                scannedPlantListLen = scanning()
-                print("pairing")
-                PairedPlantListLen=pairing(whichPlant)
-
-                if scannedPlantListLen == PairedPlantListLen:
-                    client.publish("FloraResult", payload="Plant Not Paired", qos=2)
-                if scannedPlantListLen>PairedPlantListLen:
-                    client.publish("FloraResult", payload="Plant Paired", qos=2)
-
-                Poller.start()
-                _PAIRINGALREADY = False
-
-        elif _PAIRINGALREADY:
-            client.publish("FloraResult", payload = "Already in Pairing mode")
-        elif _SCANNINGALREADY:
-            client.publish("FloraResult", payload = "Already in Scanning mode")      
-
-    """POLLING"""
     
-    if  message.topic=="Polling":
-
-        print("III")
-        if  Poller.ImPolling == False:
-            Poller.start()
-        else:
-            Poller.stop()
-            Poller.start()
+    info['status']=status
+    info['pairing']=bpairing
+    info['plants']=PlantList
+    info['thermos']=ThermoList
+    resp = json.dumps(info)
+    return resp
+    
 
 
 
@@ -164,14 +208,11 @@ def onMessage(client, userdata, message):
 Poller = SystemPoller()
 
 def main():
-    Scanner.getDongleNumber()
+    Poller.checkDatabase()
     Poller.start()
+    app.run(host='0.0.0.0',debug = True, port=23231)
 
 if __name__=="__main__":
     main()
 
-client = mqtt.Client("python2")
-client.connect_async(_BROKER)
-client.on_connect = onConnect
-client.on_message = onMessage
-client.loop_forever()
+

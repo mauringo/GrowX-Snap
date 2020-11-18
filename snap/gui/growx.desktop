@@ -4,6 +4,6 @@ Encoding=UTF-8
 Name=GrowX 
 Comment=Low-code programming for event-driven applications
 Exec=growx.desktop-launch
-Icon=${SNAP}/meta/gui/growx.png
+Icon=${SNAP}/meta/gui/icon.png
 Terminal=false
 Categories=Development;

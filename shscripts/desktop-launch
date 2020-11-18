@@ -1,2 +1,2 @@
 #!/bin/sh
-xdg-open http://localhost:5000
+xdg-open http://localhost:23232

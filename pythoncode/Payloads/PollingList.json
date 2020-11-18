@@ -1,5 +1,17 @@
 {
-    "sensors": [],
-    "plants": [],
-    "thermos": []
+    "sensors": [
+        "c4:7c:8d:63:80:24",
+        "80:ea:ca:89:00:27",
+        "80:ea:ca:89:00:10",
+        "80:ea:ca:88:ec:69"
+    ],
+    "plants": [
+        "Plant1",
+        "Plant2",
+        "Plant3",
+        "Plant4"
+    ],
+    "thermos": [
+        "58:2d:34:35:24:7b"
+    ]
 }

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Growx</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="../assets/icon.png" />
+        <!-- Font Awesome icons (free version)-->
+        <script src="../libs/all.js" ></script>
+        <script src="../js/utils.js"></script>
+        <script src="../js/plant2.js"></script>
+        <script src="../libs/jquery-3.4.1.min.js"></script>
+        <script src="../libs/plotly-latest.min.js"></script>
+        <script src="../libs/popper.min.js"></script>
+        <link href="../css/style.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="../css/styles.css" rel="stylesheet" />
+    </head>
+    <body id="page-top">
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
+            <div class="container">
+                <a class="navbar-brand js-scroll-trigger" href="/">
+                    <img src="../assets/icon.png" width="50" height="50" class="d-inline-block align-top" alt="">
+                                  GrowX   </a>
+                <button class="navbar-toggler navbar-toggler-right text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    Menu
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="thermo.html">Room Temperature</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="plant1.html">Plant 1</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="plant2.html">Plant 2</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="plant3.html">Plant 3</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="plant4.html">Plant 4</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="settings.html">Settings</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- Masthead-->
+        <header class="masthead bg-primary text-white text-center">
+            <div class="container-fluid">
+                
+                <!-- About Section Heading-->
+                <h1 class="page-section-heading text-center text-uppercase text-white ">Plant 2 Data</h1>
+                <h4 class="page-section-heading text-center text-uppercase text-white">Select Time Range:</h4>
+                <div class="row vertical-spacing ">
+                    <div class="col-3">
+                       
+                    </div>
+
+                    <div class="col-sm-3">
+                        <div class="btn-group vertical-spacing" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-secondary" onclick="setTime(6,'h')">6 h</button>
+                        <button type="button" class="btn btn-secondary" onclick="setTime(12,'h')">12 h</button>
+                        <button type="button" class="btn btn-secondary" onclick="setTime(1,'d')">1 day</button>
+                        <button type="button" class="btn btn-secondary" onclick="setTime(3,'d')">3 days</button>
+                    </div>
+                    </div>
+                    <div class="col-sm-3">
+                      
+                        <div class="btn-group vertical-spacing" role="group" aria-label="Basic example">
+                   
+                            <button type="button" class="btn btn-secondary">1 week</button>
+                            <button type="button" class="btn btn-secondary">2 weeks</button>
+                            <button type="button" class="btn btn-secondary">1 Month</button>
+                          </div>
+                    </div>
+                    <div class="col-3"></div>
+                 
+                  </div>
+                
+            </div>
+            <div class="container-fluid ">
+             
+                <div class="row vertical-spacing ">
+                  <div class="col-sm"></div>
+                  <div class="col-sm countour-spacing">
+                    
+                    
+                  </div>
+                  <div class="col-sm"></div>
+                </div>
+                <div class="row vertical-spacing ">
+          
+                         
+          
+                          <div class="col-sm-6 ">
+                              <div  id="moisture">
+                                  <!-- Append graph here -->
+                                </div>
+                             
+                          </div>
+                          <div class="col-sm-6 ">
+                            <div id="temperature">
+                                <!-- Append graph here -->
+                              </div>
+                           
+                        </div>
+                  
+                </div>
+                <div class="row vertical-spacing ">
+          
+                         
+          
+                    <div class="col-sm-6 ">
+                        <div  id="conductivity">
+                            <!-- Append graph here -->
+                          </div>
+                       
+                    </div>
+                    <div class="col-sm-6 ">
+                      <div id="light">
+                          <!-- Append graph here -->
+                        </div>
+                     
+                  </div>
+            
+          </div>
+            </div>
+    
+        
+        
+            <div class="container">
+                <!-- About Section Heading-->
+                <h2 id="batteryindicator"  class="page-section-heading text-center text-uppercase text-white vertical-double-spacing " >Device Battery Left:</h2>
+                
+            </div>
+
+    </header>
+        <!-- Footer-->
+        <footer class="footer text-center">
+            <div class="container">
+                <div class="row">
+                    <!-- Footer Location-->
+                    <div class="col-lg-4 mb-5 mb-lg-0">
+                        <h4 class="text-uppercase mb-4">Location</h4>
+                        <p class="lead mb-0">
+                            2215 John Daniel Drive
+                            <br />
+                            Clark, MO 65243
+                        </p>
+                    </div>
+                    <!-- Footer Social Icons-->
+                    <div class="col-lg-4 mb-5 mb-lg-0">
+                        <h4 class="text-uppercase mb-4">Around the Web</h4>
+                        <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-facebook-f"></i></a>
+                        <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-twitter"></i></a>
+                        <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-linkedin-in"></i></a>
+                        <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-dribbble"></i></a>
+                    </div>
+                    <!-- Footer About Text-->
+                    <div class="col-lg-4">
+                        <h4 class="text-uppercase mb-4">About Freelancer</h4>
+                        <p class="lead mb-0">
+                            Freelance is a free to use, MIT licensed Bootstrap theme created by
+                            <a href="http://startbootstrap.com">Start Bootstrap</a>
+                            .
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- Copyright Section-->
+        <div class="copyright py-4 text-center text-white">
+            <div class="container"><small>GrowX - 2020</small></div>
+        </div>
+        <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes)-->
+        <div class="scroll-to-top d-lg-none position-fixed">
+            <a class="js-scroll-trigger d-block text-center text-white rounded" href="#page-top"><i class="fa fa-chevron-up"></i></a>
+        </div>
+       
+        <!-- Bootstrap core JS-->
+        <script src="../libs/jquery-3.4.1.min.js"></script>
+        <script src="../libs/bootstrap-4.4.1-dist/js/bootstrap.bundle.js"></script>
+        <!-- Third party plugin JS-->
+       
+        <!-- Contact form JS-->
+        <script src="../assets/mail/jqBootstrapValidation.js"></script>
+        <script src="../assets/mail/contact_me.js"></script>
+    
+    </body>
+</html>

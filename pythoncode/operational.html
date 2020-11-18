@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Wifi Connected</title>
+        <link rel="stylesheet" href="/static/css/application.css" />
+        <script src="/static/js/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div id="main-content" class="inner-wrapper">
+		<br/>
+		<div class="row no-border" id="login">
+			<fieldset>
+				<div class="p-form-validation" id="passphrasePage_form">
+					<label for="passphrasePage">Password:</label>
+					<input class="p-form-validation__input" type="password" id="passphrasePage"/>
+					<input type="checkbox" id="showpassphrasePage" onchange="show_passphrase('Page')"/>
+					<label for="showpassphrasePage">show passphrase</label>
+				</div>
+				<div class="p-notification--negative cheshire" id="passphrasePage_error">
+					<p class="p-notification__response">
+						<span class="p-notification__status">Error:</span> <text id="passphrasePage_error_msg"></text>
+					</p>
+				</div>
+				<button class="p-button--positive" onclick="authenticate()"/>Continue</button>
+			</fieldset>
+		</div>
+           
+		<div class="row no-border">
+			<div class="p-notification--positive" id="grid">
+				<p class="p-notification__response">
+					<span class="p-notification__status">Connected!</span>
+					The device is connected to an external WiFi AP.<br/>
+					Click below to disconnect. Then, join the device Wifi AP, 
+					where you can select a new external AP to connect to.
+				</p>
+				<br/>
+				<button class="p-button--negative" id="disconnect" onclick="disconnect()">Disconnect from Wi-Fi</button>
+			</div>
+		</div>
+		   
+    </div>
+
+<script>
+	$(document).ready(function(){
+		$('#grid').css('display', 'none')      
+
+		// enable submit password when enter is pressed for login div
+        $('#passphrasePage').keydown(function(event) {
+            if (event.keyCode == 13) {
+                authenticate()
+                return false;
+            }
+        });
+	})
+
+	function showOper() {
+	    $('#login').css('display', 'none');      
+	    $('#grid').css('display', 'block');     
+	}
+
+	function show_passphrase(i) {
+	    var type = document.getElementById('showpassphrase'+i).checked ? 'text' : 'password' 
+	    document.getElementById('passphrase'+i).type = type
+	}
+
+    function authenticate() {
+        $.ajax({
+            type: "POST",
+            url: "/hashit",
+            data: {Hash: $('#passphrasePage').val()}
+        }).done(function (hashRet) {
+            console.log("in ajax done.", hashRet);
+            hash = JSON.parse(hashRet);
+            console.log(hash)
+            if (hash.HashMatch) {
+                showOper();
+            } else {
+                $('#passphrasePage_form').addClass('is-error')
+                $('#passphrasePage_error_msg').text('Your password does not match, please try again')
+                $('#passphrasePage_error').css('display', 'block')
+            }
+        })
+	}    
+
+	function disconnect() {
+		$.ajax({
+		url: "/disconnect"
+		}).done(function () {
+			console.log("in ajax done.");
+
+		})
+	} 
+</script>
+
+</body>
+</html>
