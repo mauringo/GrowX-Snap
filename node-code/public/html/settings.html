@@ -53,7 +53,7 @@
                         
                     
                             <p class="text-center text-uppercase text-white vertical-spacing ">System status:</p>
-                            <p class="text-left ">
+                            <p class="text-justify vertical-spacing ">
                             <div class="custom-control custom-checkbox custom-checkbox-green">
                               <input type="checkbox" class="custom-control-input custom-control-input-green" id="pollingcheck">
                               <label class="custom-control-label" for="pollingcheck">Polling</label>
@@ -74,7 +74,7 @@
                               </div>
                              
                               <div class="form-group">
-                                <label for="exampleFormControlTextarea1">Example textarea</label>
+                                <label for="exampleFormControlTextarea1">Connected Devices</label>
                                 <textarea class="form-control" id="sensorspresent" rows="3"></textarea>
                               </div>
                      
@@ -84,22 +84,90 @@
                         
                     
                         <p class="text-center text-uppercase text-white vertical-spacing ">Connect a MiFlora:</p>
-                    
-                          <button type="button" onclick="pairflora('Plant1')" class="btn btn-success vertical-spacing">Connect Plant 1</button>
-                          <button type="button" onclick="pairflora('Plant2')" class="btn btn-success vertical-spacing">Connect Plant 2 </button>
-                          <button type="button" onclick="pairflora('Plant3')" class="btn btn-success vertical-spacing">Connect Plant 3</button>
-                          <button type="button" onclick="pairflora('Plant4')" class="btn btn-success vertical-spacing">Connect Plant 4</button>              
-                 
-           
+                        <div class="btn-group btn-group-primary" role="group" aria-label="...">
+                            <button type="button disabled" id="plant1c" onclick="pairflora('Plant1')" class="btn btn-success vertical-spacing">Connect Plant 1</button>
+                            <button type="button" id="plant1d" onclick="remone('Plant1')" class="btn btn-danger vertical-spacing">Disconnect</button>
+                        </div>
+                        <div class="btn-group btn-group-primary" role="group" aria-label="...">
+                            <button type="button" id="plant2c" onclick="pairflora('Plant2')" class="btn btn-success vertical-spacing">Connect Plant 2</button>
+                            <button type="button" id="plant2d" onclick="remone('Plant2')" class="btn btn-danger vertical-spacing">Disconnect</button>
+                        </div>
+                        <div class="btn-group btn-group-primary" role="group" aria-label="...">
+                            <button type="button" id="plant3c" onclick="pairflora('Plant3')" class="btn btn-success vertical-spacing">Connect Plant 3</button>
+                            <button type="button" id="plant3d" onclick="remone('Plant3')" class="btn btn-danger vertical-spacing">Disconnect</button>
+                        </div>
+                        <div class="btn-group btn-group-primary" role="group" aria-label="...">
+                            <button type="button" id="plant4c" onclick="pairflora('Plant4')" class="btn btn-success vertical-spacing">Connect Plant 4</button>
+                            <button type="button" id="plant4d" onclick="remone('Plant4')" class="btn btn-danger vertical-spacing">Disconnect</button>
+                        </div>
+                                               
+                         
                 </div>
 
                     <div class="col-sm-4">
                         <p class="text-center text-uppercase text-white vertical-spacing ">Connect a MI Thermo, easy connect</p> 
-                        <button type="button" onclick="pairThermo()" class="btn btn-success vertical-spacing">Connect Mi Thermo</button>
+                        <div class="btn-group btn-group-primary" role="group" aria-label="...">
+                            <button type="button" id="thermoc" onclick="pairThermo()" class="btn btn-success vertical-spacing">Connect Mi Thermo</button>
+                            <button type="button" id="thermod" onclick="remone('Thermo')" class="btn btn-danger vertical-spacing">Disconnect</button>
+                        </div>
+                       
                        
                 
                 </div>
             </div>
+           
+      
+            <div class="container-fluid">
+                
+                
+               
+                <div class="row vertical-spacing ">
+                    <div class="col-sm-4">
+                       
+                    </div>
+                    
+                    <div class="col-sm-4 justify-content">
+                        
+                        <p class="text-center text-uppercase text-white vertical-spacing ">Sensor Manual Connection</p>
+                        <p class="text-center text-uppercase text-white vertical-spacing ">Select Device and Insert Sensor Mac Address</p>
+                
+                            <div class="form-row">
+                              <div class="form-group col-md-8">
+                                <label for="inputCity">MAC Address</label>
+                                <input type="text" class="form-control" id="inputCity">
+                              </div>
+                              <div class="form-group col-md-4">
+                                <label for="inputState">Sensor</label>
+                                <select id="inputState" class="form-control">
+                                    <option selected>Choose...</option>
+                                    <option value="1">Thermo</option>
+                                    <option value="1">Plant1</option>
+                                    <option value="2">Plant2</option>
+                                    <option value="3">Plant3</option>
+                                    <option value="3">Plant3</option>
+                                </select>
+                              </div>
+                              
+                            </div>
+                            <button type="submit" class="btn btn-primary">Connect Sensor</button>
+                          </form>
+                          
+                         
+                   
+                     
+               
+                    </div>
+
+                    <div class="col-sm-4">
+                       
+                    </div>
+                    
+                 
+                  </div>
+                
+            </div>
+        
+            
             <div class="container-fluid">
                 
                 
@@ -116,7 +184,8 @@
                         <button type="button" onclick="removeall()" class="btn btn-danger vertical-spacing">Disconnect All Sensors</button>
                            
                
-                           
+                        
+           
                    
                      
                
@@ -130,11 +199,6 @@
                   </div>
                 
             </div>
-      
-        
-        
-            
-
     </header>
         <!-- Footer-->
         <footer class="footer text-center">

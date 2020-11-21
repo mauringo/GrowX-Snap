@@ -2,13 +2,11 @@
     "sensors": [
         "c4:7c:8d:63:80:24",
         "80:ea:ca:89:00:27",
-        "80:ea:ca:89:00:10",
-        "80:ea:ca:88:ec:69"
+        "80:ea:ca:89:00:10"
     ],
     "plants": [
         "Plant1",
         "Plant2",
-        "Plant3",
         "Plant4"
     ],
     "thermos": [

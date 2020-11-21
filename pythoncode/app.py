@@ -51,6 +51,28 @@ def pairThermoThread():
 
     Poller.start()
 
+
+def restartThread():   
+    global  _PAIRINGALREADY,_SCANNINGALREADY
+    _PAIRINGALREADY = True
+    Poller.stop()
+   
+  
+    _PAIRINGALREADY = False
+    _SCANNINGALREADY = False
+
+    Poller.start()
+
+def removeone():   
+    global _THERMOCOUNT, _PAIRINGALREADY,_SCANNINGALREADY
+    Poller.stop()
+    _PAIRINGALREADY = True
+    _THERMOCOUNT = Scanner.scanForNewThermo()
+    _PAIRINGALREADY = False
+    _SCANNINGALREADY = False
+
+    Poller.start()
+
 def pairFloraThread(whichPlant): 
     global _PLANTSSCANNED, _PAIRINGALREADY    
     Data={}   
@@ -71,6 +93,54 @@ def pairFloraThread(whichPlant):
 
 #rest API functions
 
+@app.route('/remone',methods=['GET', 'POST'])
+def removeoneg():
+    global _SCANNINGALREADY
+    global _PAIRINGALREADY
+    
+    
+    if  not _PAIRINGALREADY and not _SCANNINGALREADY:
+        print("I have removeone")
+        with open('Payloads/PollingList.json', 'r') as fh:
+            Data = json.load(fh)
+        PollingList=Data['sensors']
+        PlantList=Data['plants']
+        ThermoList=Data['thermos']
+
+        datar = str(request.data.decode('UTF-8'))
+        print (datar)
+        obj = json.loads(datar)
+        print (obj['sensor'])
+
+        #sensore thermo
+        if(obj['sensor']=='Thermo'):
+            ThermoList=[]
+        elif obj['sensor'] in PlantList :
+            PollingList.pop(PlantList.index(obj['sensor'] ))
+            PlantList.pop(PlantList.index(obj['sensor'] ))
+            
+        Data['sensors']=PollingList
+        Data['plants']=PlantList
+        Data['thermos']=ThermoList
+        with open('Payloads/PollingList.json', 'w', encoding='utf-8') as f:
+            json.dump(Data, f, ensure_ascii=False, indent=4) 
+        
+        restarter = Thread(target=restartThread)
+        restarter.start()
+        info={}
+        s="Sensor Removed"
+        info['status']=s
+        print(s)
+        resp = json.dumps(info)
+        return resp
+
+    info={}
+    s="i am already pairing"
+    info['status']=s
+    print(s)
+    resp = json.dumps(info)
+    return resp
+
 @app.route('/remall',methods=['GET', 'POST'])
 def remall():              
     global _SCANNINGALREADY
@@ -84,8 +154,8 @@ def remall():
     Data['plants']=[]
     Data['thermos']=[]
     with open('Payloads/PollingList.json', 'w', encoding='utf-8') as f:
-        json.dump(Data, f, ensure_ascii=False, indent=4)  
-    
+        json.dump(Data, f, ensure_ascii=False, indent=4) 
+  
     return ("All sensors removed")
 
 
