@@ -60,7 +60,7 @@ def scanForNewThermo():
                     thermolist.append(dev.addr)                         
                     print("ok thermo")
                     thermoCount += 1
-                    Data['thermos']=Data['thermos'Data['thermos']]thermolist
+                    Data['thermos']=thermolist
                     with open("Payloads/PollingList.json", 'w', encoding='utf-8') as f:
                             json.dump(Data, f, ensure_ascii=False, indent=4)
                     return thermoCount

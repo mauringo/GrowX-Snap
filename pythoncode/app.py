@@ -15,7 +15,7 @@ app = Flask(__name__, static_url_path='')
 
 
 
-os.chdir(dir_path)
+
 
 _SCANNINGALREADY = False
 _PAIRINGALREADY = False

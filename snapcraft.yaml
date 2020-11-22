@@ -1,5 +1,5 @@
 name: growx
-version: '0.2'
+version: '1.0'
 base: core18
 summary: Grow your plant and your Business
 description: python edge ( psutils, bluepy )
@@ -16,16 +16,15 @@ apps:
 
   webserver: 
     command: bin/runserver.sh 
+    plugs: [network, network-bind, mount-observe, network-observe, system-observe, bluetooth-control]
     daemon: simple
     restart-condition: always
-    plugs: [network, network-bind, mount-observe, network-observe, system-observe, bluetooth-control]
-
+    
   growx-daemon: 
     command: bin/run.sh
+    plugs: [network, network-bind, mount-observe, network-observe, system-observe, bluetooth-control]
     daemon: simple
     restart-condition: always
-    plugs: [network, network-bind, mount-observe, network-observe, system-observe, bluetooth-control]
-
     
   
   influxd:
@@ -34,12 +33,12 @@ apps:
         daemon: simple
         restart-condition: always
         environment:
-          INFLUXDB_META_DIR: $SNAP_DATA/meta
-          INFLUXDB_DATA_DIR: $SNAP_DATA/data
-          INFLUXDB_DATA_WAL_DIR: $SNAP_DATA/wal
-          INFLUXDB_CONFIG_PATH: $SNAP_DATA/conf/influxdb.conf
-          INFLUXD_BOLT_PATH: $SNAP_DATA/influxdbv2/influxd.bolt
-          INFLUXD_ENGINE_PATH: $SNAP_DATA/influxdbv2/engine
+          INFLUXDB_META_DIR: $SNAP_COMMON/meta
+          INFLUXDB_DATA_DIR: $SNAP_COMMON/data
+          INFLUXDB_DATA_WAL_DIR: $SNAP_COMMON/wal
+          INFLUXDB_CONFIG_PATH: $SNAP_COMMON/conf/influxdb.conf
+          INFLUXD_BOLT_PATH: $SNAP_COMMON/influxdbv2/influxd.bolt
+          INFLUXD_ENGINE_PATH: $SNAP_COMMON/influxdbv2/engine
 
   influx:
         command: usr/bin/influx
@@ -119,7 +118,7 @@ parts:
             - libcurl3-dev
             - libcurl4-openssl-dev
 
-  node-edge-platform:
+  nodejs:
     plugin: nodejs
     source: .
   
