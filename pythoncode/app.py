@@ -167,6 +167,7 @@ def addoneg():
             PollingList.append(obj['MAC'])
             PlantList.append(obj['sensor'])
         elif obj['sensor'] in PlantList :
+            info={}
             s =  obj['sensor'] + " has already a sensor"
             print(s)
             info['status']=s
