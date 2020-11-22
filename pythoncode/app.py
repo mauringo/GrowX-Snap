@@ -323,6 +323,7 @@ def info():
     info['pairing']=bpairing
     info['plants']=PlantList
     info['thermos']=ThermoList
+    info['ndongle']=str(Poller.NofDongles)
     resp = json.dumps(info)
     return resp
     

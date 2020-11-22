@@ -21,10 +21,11 @@ function updateStatus() {
       $('#plant2d').prop('disabled',!data.plants.includes("Plant2"));
       $('#plant3d').prop('disabled',!data.plants.includes("Plant3"));
       $('#plant4d').prop('disabled',!data.plants.includes("Plant4"));
-
+ 
       $('#thermoc').prop('disabled',(data.thermos).length >0);
       $('#thermod').prop('disabled',!(data.thermos).length >0);
 
+      $('#btnum').text("Bluetooth Dongles detected: "+data.ndongle);
       
     })
     .catch((error) => {
