@@ -21,7 +21,7 @@ function loadGraph(graph,color,title,range,sensor, dataq,time,units) {
     y: unpackData(data, dataq),
     line: {color: color,
            shape: 'spline', 
-           smoothing: 0.6,
+           smoothing: 0.2,
            width: 4}
   }
   

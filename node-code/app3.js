@@ -189,6 +189,29 @@ app.post("/remone", (client_req, client_res)=>{
   });
 });
 
+app.post("/addone", (client_req, client_res)=>{
+  console.log('serve: ' + client_req.url);
+
+  var options = {
+    hostname: 'localhost',
+    port: 23231,
+    path: client_req.url,
+    method: client_req.method,
+    headers: client_req.headers
+  };
+
+  var proxy = http.request(options, function (res) {
+    client_res.writeHead(res.statusCode, res.headers)
+    res.pipe(client_res, {
+      end: true
+    });
+  });
+
+  client_req.pipe(proxy, {
+    end: true
+  });
+});
+
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development

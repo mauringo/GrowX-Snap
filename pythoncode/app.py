@@ -141,13 +141,67 @@ def removeoneg():
     resp = json.dumps(info)
     return resp
 
+@app.route('/addone',methods=['GET', 'POST'])
+def addoneg():
+    global _SCANNINGALREADY
+    global _PAIRINGALREADY
+    
+    
+    if  not _PAIRINGALREADY and not _SCANNINGALREADY:
+        print("I have addone")
+        with open('Payloads/PollingList.json', 'r') as fh:
+            Data = json.load(fh)
+        PollingList=Data['sensors']
+        PlantList=Data['plants']
+        ThermoList=Data['thermos']
+
+        datar = str(request.data.decode('UTF-8'))
+        print (datar)
+        obj = json.loads(datar)
+        print (obj['sensor'])
+        print ()
+        
+        if(obj['sensor']=='Thermo'):
+            ThermoList.append(obj['MAC'])
+        elif not obj['sensor'] in PlantList :
+            PollingList.append(obj['MAC'])
+            PlantList.append(obj['sensor'])
+        elif obj['sensor'] in PlantList :
+            s =  obj['sensor'] + " has already a sensor"
+            print(s)
+            info['status']=s
+            resp = json.dumps(info)
+            return resp
+
+        Data['sensors']=PollingList
+        Data['plants']=PlantList
+        Data['thermos']=ThermoList
+        with open('Payloads/PollingList.json', 'w', encoding='utf-8') as f:
+            json.dump(Data, f, ensure_ascii=False, indent=4) 
+        
+        restarter = Thread(target=restartThread)
+        restarter.start()
+        info={}
+        s="Sensor Added"
+        info['status']=s
+        print(s)
+        resp = json.dumps(info)
+        return resp
+
+    info={}
+    s="i am already pairing"
+    info['status']=s
+    print(s)
+    resp = json.dumps(info)
+    return resp
+
 @app.route('/remall',methods=['GET', 'POST'])
 def remall():              
     global _SCANNINGALREADY
     global _PAIRINGALREADY
     global Poller 
 
-    print("I have received Remove All Sensors")
+    print("I have received: Remove All Sensors")
     Poller.stop()
     Data={}
     Data['sensors']=[]
@@ -227,7 +281,7 @@ def PairFlora():
         else:
             myScanner = Thread(target=pairFloraThread,args=(whichPlant,)) 
             myScanner.start()
-            s="Plant to be recorded" + whichPlant
+            s="Plant to be recorded: " + whichPlant
             info['status']=s
             print(s)
             resp = json.dumps(info)

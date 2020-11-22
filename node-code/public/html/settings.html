@@ -130,28 +130,27 @@
                         
                         <p class="text-center text-uppercase text-white vertical-spacing ">Sensor Manual Connection</p>
                         <p class="text-center text-uppercase text-white vertical-spacing ">Select Device and Insert Sensor Mac Address</p>
-                
+                    
                             <div class="form-row">
                               <div class="form-group col-md-8">
-                                <label for="inputCity">MAC Address</label>
-                                <input type="text" class="form-control" id="inputCity">
+                                <label for="inputMAC">MAC Address</label>
+                                <input type="text" class="form-control" id="inputMAC">
                               </div>
                               <div class="form-group col-md-4">
                                 <label for="inputState">Sensor</label>
                                 <select id="inputState" class="form-control">
-                                    <option selected>Choose...</option>
-                                    <option value="1">Thermo</option>
-                                    <option value="1">Plant1</option>
-                                    <option value="2">Plant2</option>
-                                    <option value="3">Plant3</option>
-                                    <option value="3">Plant3</option>
+                                    <option selected value="0">Choose...</option>
+                                    <option value="Thermo">Thermo</option>
+                                    <option value="Plant1">Plant1</option>
+                                    <option value="Plant2">Plant2</option>
+                                    <option value="Plant3">Plant3</option>
+                                    <option value="Plant4">Plant3</option>
                                 </select>
                               </div>
                               
                             </div>
-                            <button type="submit" class="btn btn-primary">Connect Sensor</button>
-                          </form>
-                          
+                            <button type="submit" onclick='addone()' class="btn btn-primary">Connect Sensor</button>
+                      
                          
                    
                      

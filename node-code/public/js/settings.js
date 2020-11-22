@@ -55,6 +55,7 @@ function pairThermo() {
     .then(data => {
       console.log('Success:', data);
       document.getElementById("message").value = data.status;
+      alert(data.status);
     })
     .catch((error) => {
       console.error('Error:', error);
@@ -73,6 +74,7 @@ function pairflora(floraname) {
     .then(data => {
       console.log('Success:', data);
       document.getElementById("message").value = data.status;
+      alert(data.status);
     })
     .catch((error) => {
       console.error('Error:', error);
@@ -88,6 +90,8 @@ function removeall() {
     .then(response => response.json())
     .then(data => {
       console.log('Success:', data);
+      alert(data.status);
+
     })
     .catch((error) => {
       console.error('Error:', error);
@@ -105,8 +109,50 @@ function remone(sensor){
   .then(response => response.json())
   .then(data => {
     console.log('Success:', data);
+    alert(data.status);
   })
   .catch((error) => {
     console.error('Error:', error);
   });
+}
+
+
+function addone(){
+  console.log($('#inputState').val());
+  console.log($('#inputMAC').val());
+  var MAC= $('#inputMAC').val();
+
+  var regex = /^[0-9a-f]{1,2}([\.:-])[0-9a-f]{1,2}(?:\1[0-9a-f]{1,2}){4}$/;
+
+  var sensor =$('#inputState').val() 
+  const data = { sensor: sensor, MAC:MAC };
+  
+  if(regex.test(MAC) & !(sensor=='0')){
+
+    fetch(location.origin+'/addone', {
+      method: 'POST', // or 'PUT'
+      
+      body: JSON.stringify(data),
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Success:', data);
+      alert(data.status);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });    
+
+    
+  }
+  
+  if(!regex.test(MAC)){
+    alert("Not a MAC address");
+  }
+
+   
+  if(sensor=='0'){
+    alert("You Must Choose a sensor");
+  }
+  
 }
