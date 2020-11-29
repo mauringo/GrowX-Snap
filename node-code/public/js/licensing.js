@@ -41,7 +41,3 @@ function licenseModal(data){
 }
 
 
-window.onload = function(){
-
-  }
-  

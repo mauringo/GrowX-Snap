@@ -52,6 +52,7 @@ function loadMyGraph(){
 
 
 window.onload = function(){
+checkLicense();
 loadMyGraph();
 }
 

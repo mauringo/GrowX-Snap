@@ -38,9 +38,9 @@ function loadMyGraph(){
 
 
 window.onload = function(){
-loadMyGraph();
-}
-
+    checkLicense();
+    loadMyGraph();
+    }
 setInterval(function() {
     
     loadMyGraph();
