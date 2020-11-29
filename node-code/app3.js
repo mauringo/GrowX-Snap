@@ -18,9 +18,9 @@ const http = require('http');
 const fs = require('fs')
 
 
-const filepath = 'unlicensed' //for developing
+//const filepath = 'unlicensed' //for developing
 
-//const filepath = process.env.SNAP_DATA+'/'+'unlicensed'; //production envirnoment
+const filepath = process.env.SNAP_DATA+'/'+'unlicensed'; //production envirnoment
 
 const influx = new Influx.InfluxDB('http://127.0.0.1:23233/room1');
 var app = express();
