@@ -15,9 +15,17 @@ const { Console } = require('console');
 const { strict } = require('assert');
 const { stringify } = require('querystring');
 const http = require('http');
+const fs = require('fs')
+
+
+//const filepath = 'unlicensed' //for developing
+
+const filepath = process.env.SNAP_DATA+'/'+'unlicensed'; //production envirnoment
 
 const influx = new Influx.InfluxDB('http://127.0.0.1:23233/room1');
 var app = express();
+
+
 
 const port = 23232;
 
@@ -36,11 +44,31 @@ app.use((req, res, next) => {
   next();
 });
 
+
+
+
+
 influx.getMeasurements()
   .then(names => console.log('My measurement names are: ' + names.join(', ')))
   
   .catch(error => console.log({ error }));
 
+
+
+function checkFilePresence(myfile) {
+  console.log("checking Licensing");
+  try {
+    if(fs.existsSync(myfile)) {
+        return true;
+
+    } else {
+        return false;
+    }
+    } catch (err) {
+        console.error(err);
+        return false;
+    }
+}
 
 function buildQuery(a) {
  
@@ -51,6 +79,24 @@ function buildQueryBattery(a) {
  
   return `select last("Battery") from ` + String(a.sensor);
 }
+
+app.get('/licensed', (request, response) => {
+  
+  a=checkFilePresence(filepath);
+
+  response.status(200).json({ unlicensed: a });
+  
+ 
+});
+
+app.post('/licensed', (request, response) => {
+  
+  fs.unlinkSync(filepath);
+
+  response.status(200).json({ done: true });
+  
+  
+});
 
 app.get('/data', (request, response) => {
   var a=request.headers;

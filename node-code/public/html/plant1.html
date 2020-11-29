@@ -10,6 +10,7 @@
         <link rel="icon" type="image/x-icon" href="../assets/icon.png" />
         <!-- Font Awesome icons (free version)-->
         <script src="../libs/all.js" ></script>
+        <script src="../js/licensing.js" ></script>
         <script src="../js/utils.js"></script>
         <script src="../js/plant1.js"></script>
         <script src="../libs/jquery-3.4.1.min.js"></script>
@@ -19,7 +20,7 @@
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="../css/styles.css" rel="stylesheet" />
     </head>
-    <body id="page-top">
+    <body id="page-top" onload="checkLicense()">
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
             <div class="container">
@@ -40,9 +41,35 @@
                         <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="settings.html">Settings</a></li>
                     </ul>
                     <a class="btn btn-outline-light btn-social mx-1" href="https://growx.dev" target="_blank"><i class="fa fa-question-circle"></i></a>
+                    <a class="btn btn-outline-light btn-social mx-1" href="https://www.paypal.com/donate?token=CiYMJ87lF4MUSl0KeuNd03_aLIEv9rHnpe-2HJlyNAXW6eiGag1lYgx_3ihjI3dffT8fVoHbkPzqzHN-" target="_blank"><i class="fa fa-heart"></i></a>
                 </div>
             </div>
         </nav>
+              
+        <div class="modal fade" id="cookieModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-body">
+                    <h2>License Info</h2>
+                    <p>GrowX is an OpenSource project! licensed under GPL3 Policy</p>
+                    <div class="notice d-flex justify-content-between align-items-center">
+                        <div class="cookie-text">The software is provided "as is", without warranty of any kind, express or implied. In no event shall the authors or copyright holders be liable for any claim, damages or other liability, whether in an action of contract, tort or otherwise, arising from, out of or in connection with the software or the use or other dealings in the software.</div>
+                       
+                      </div>
+                  <div class="notice d-flex justify-content-between align-items-center">
+
+                    <div class="cookie-text vertical-spacing">Check the GitHub repository to get detailed informations!</div>
+                   
+                  </div>
+              
+                  <div class="buttons d-flex flex-column flex-lg-row justify-content-between align-items-center ">
+                    <a href="#a" class="btn btn-success btn-sm vertical-spacing" onclick="license()" data-dismiss="modal">I accept</a>
+                    <a  href="https://github.com/mauringo/GrowX-Snap" target="_blank" class="btn btn-secondary btn-sm vertical-spacing" >Check Code and Licenses</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         <!-- Masthead-->
         <header class="masthead bg-primary text-white text-center">
             <div class="container-fluid">
@@ -151,10 +178,10 @@
                         </div>
                         <!-- Footer Social Icons-->
                         <div class="col-lg-6 mb-5 mb-lg-0">
-                            <h4 class="text-uppercase mb-4">Check out the GrowX project! </h4>
+                            <h4 class="text-uppercase mb-4">Check out the GrowX OpenSource project! </h4>
                             <a class="btn btn-outline-light btn-social mx-1" href="https://growx.dev" target="_blank"><i class="fa fa-link"></i></a>
                             <a class="btn btn-outline-light btn-social mx-1" href="https://github.com/mauringo/GrowX-Snap" target="_blank"><i class="fa fa-code"></i></a>
-                           
+                            <a class="btn btn-outline-light btn-social mx-1" href="https://www.paypal.com/donate?token=CiYMJ87lF4MUSl0KeuNd03_aLIEv9rHnpe-2HJlyNAXW6eiGag1lYgx_3ihjI3dffT8fVoHbkPzqzHN-" target="_blank"><i class="fa fa-heart"></i></a>
                         </div>
                         <!-- Footer About Text-->
                         <div class="col-lg-3">

@@ -7,4 +7,4 @@ if [ ! -d "$SNAP_COMMON/conf" ]; then
         cp "$SNAP/bin/conf/influxdb.conf" "$SNAP_COMMON/conf/influxdb.conf"
 fi
 
-
+touch $SNAP_DATA/unlicensed

@@ -1,7 +1,7 @@
 name: growx
 version: '1.0'
 base: core18
-summary: Grow your plant and your Business
+summary: GrowX:the Opensource Smart Farming App
 description: python edge ( psutils, bluepy )
 confinement: devmode
 grade: stable
@@ -113,6 +113,8 @@ parts:
         source:
          - on amd64: https://dl.influxdata.com/influxdb/releases/influxdb_1.8.3_amd64.deb
          - on arm64: https://dl.influxdata.com/influxdb/releases/influxdb_1.8.3_arm64.deb
+         - on armhf: https://dl.influxdata.com/influxdb/releases/influxdb_1.8.3_armhf.deb
+         - on i386: https://dl.influxdata.com/influxdb/releases/influxdb_1.8.3_i386.deb
         stage-packages:
             - libssl1.1
             - libcurl3-dev
