@@ -1,9 +1,15 @@
 name: growx
 version: '1.0'
 base: core18
-summary: GrowX:the Opensource Smart Farming App
-description: python edge ( psutils, bluepy )
-confinement: devmode
+summary: GrowX the Opensource Greenhouse monitoring App
+description: |
+      ** GrowX **
+
+      GrowX allows to monitor your greenhouse using standard consumer sensors. Currently we are
+      supporting the Xiaomi MiFlora and the Xiaomi Mijia Hygrothermo v2 (LYWSDCGQ) but we are        
+      planning to expand the number of supported devices.
+      
+confinement: strict
 grade: stable
 
     
