@@ -1,14 +1,8 @@
 # GrowX-Snap
-Snap Version of GrowX
-how to build:
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-1)sudo snap install lxd
+[![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/growx)
 
-2)sudo lxd init 
 
-3)accept all the default options
-
-4)working inside the folder run:
-  sudo snapcraft cleanbuild.
-  
- That's all!!
+GrowX allows to monitor your greenhouse using standard consumer sensors. Currently we are
+supporting the Xiaomi MiFlora and the Xiaomi Mijia Hygrothermo v2 (LYWSDCGQ) but we are planning to expand the number of supported devices.
