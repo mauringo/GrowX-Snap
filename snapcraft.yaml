@@ -4,10 +4,27 @@ base: core18
 summary: GrowX the Opensource Greenhouse monitoring App
 description: |
       ** GrowX **
-
+      GUI accessible on port 23232
+      
       GrowX allows to monitor your greenhouse using standard consumer sensors. Currently we are
-      supporting the Xiaomi MiFlora and the Xiaomi Mijia Hygrothermo v2 (LYWSDCGQ) but we are        
-      planning to expand the number of supported devices.
+      supporting the Xiaomi MiFlora and the Xiaomi Mijia Hygrothermo v2 (LYWSDCGQ) but we are planning to expand the number of supported devices. The next version will contain a plant status       
+      evaluation using camera and Artificial Intelligence.
+
+      
+
+      We are currently expanding our APP, if you have any idea or suggestion feel free to contact us via mail or GitHub.
+
+      For ubuntu core devices:install snap bluetooth-autosatart to ensure bluetooth enabling at boot
+
+      This app requires bluetooth access
+
+      USAGE**
+
+      1 - install growx
+        "sudo snap install growx"
+      2 -connect if needed the proper interface
+         "sudo snap connect growx:bluetooth-control"
+      3- follow the youtube video:https://youtu.be/ZJ3xdABL6ic
       
 confinement: strict
 grade: stable
