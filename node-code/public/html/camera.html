@@ -7,25 +7,24 @@
         <meta name="author" content="" />
         <title>Growx</title>
         <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="assets/icon.png" />
+        <link rel="icon" type="image/x-icon" href="../assets/icon.png" />
         <!-- Font Awesome icons (free version)-->
-        <script src="libs/all.js" ></script>
-        <script src="js/utils.js"></script>
-        <script src="js/thermo.js"></script>
-        <script src="js/licensing.js"></script>
-        <script src="libs/jquery-3.4.1.min.js"></script>
-        <script src="libs/plotly-latest.min.js"></script>
-        <script src="libs/popper.min.js"></script>
-        <link href="css/style.css" rel="stylesheet" />
+        <script src="../libs/all.js" ></script>
+        <script src="../js/camera.js"></script>
+        <script src="../js/licensing.js" ></script>
+        <script src="../libs/jquery-3.4.1.min.js"></script>
+        <script src="../libs/plotly-latest.min.js"></script>
+        <script src="../libs/popper.min.js"></script>
+        <link href="../css/style.css" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="css/styles.css" rel="stylesheet" />
+        <link href="../css/styles.css" rel="stylesheet" />
     </head>
     <body id="page-top">
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
             <div class="container">
                 <a class="navbar-brand js-scroll-trigger" href="/">
-                    <img src="./assets/icon.png" width="50" height="50" class="d-inline-block align-top" alt="">
+                    <img src="../assets/icon.png" width="50" height="50" class="d-inline-block align-top" alt="">
                                   GrowX   </a>
                 <button class="navbar-toggler navbar-toggler-right text-uppercase font-weight-bold bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                     Menu
@@ -33,13 +32,13 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ml-auto">
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="html/thermo.html">Room Temperature</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="html/plant1.html">Plant N1</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="html/plant2.html">Plant N2</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="html/plant2.html">Plant N3</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="html/plant4.html">Plant N4</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="html/camera.html">Camera Inspector</a></li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="html/settings.html">Settings</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="thermo.html">Room Temperature</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="plant1.html">Plant N1</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="plant1.html">Plant N2</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="plant1.html">Plant N3</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="plant1.html">Plant N4</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="camera.html">Camera Inspector</a></li>
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="settings.html">Settings</a></li>
                     </ul>
                     <a class="btn btn-outline-light btn-social mx-1" href="https://growx.dev" target="_blank"><i class="fa fa-question-circle"></i></a>
 
@@ -52,9 +51,9 @@
                       </form>                </div>
             </div>
         </nav>
-       
-          
-          <div class="modal fade" id="cookieModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+              
+        <div class="modal fade" id="cookieModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-body">
@@ -80,76 +79,59 @@
           </div>
         <!-- Masthead-->
         <header class="masthead bg-primary text-white text-center">
-            <div class="container-fluid">
-                
-                <!-- About Section Heading-->
-                <h1 class="page-section-heading text-center text-uppercase text-white ">Room Data</h1>
-                <h4 class="page-section-heading text-center text-uppercase text-white">Select Time Range:</h4>
-                  
-                <div class="row vertical-spacing ">
-                    <div class="col-3">
-                       
-                    </div>
 
-                    <div class="col-sm-3">
-                        <div class="btn-group vertical-spacing" role="group" aria-label="Basic example">
-                        <button type="button" class="btn btn-secondary" onclick="setTime(6,'h')">6 h</button>
-                        <button type="button" class="btn btn-secondary" onclick="setTime(12,'h')">12 h</button>
-                        <button type="button" class="btn btn-secondary" onclick="setTime(1,'d')">1 day</button>
-                        <button type="button" class="btn btn-secondary" onclick="setTime(3,'d')">3 days</button>
+   
+ 
+              
+              <div class="container-fluid vertical-spacing ">
+                <div class="row">
+                  <div class="col-sm-2"></div>
+                  <div class="col-sm-8">
+                    
+                    
+                    <div class="text-center">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                      <button type="button" onclick=releaseCameras() class="btn btn-secondary">Release Camera</button>
+                      <button type="button" onclick=restartCameras() class="btn btn-secondary">Restart Camera</button>
+                     
                     </div>
-                    </div>
-                    <div class="col-sm-3">
-                      
-                        <div class="btn-group vertical-spacing" role="group" aria-label="Basic example">
-                   
-                            <button type="button" class="btn btn-secondary" onclick="setTime(1,'w')">1 week</button>
-                            <button type="button" class="btn btn-secondary" onclick="setTime(2,'w')">2 weeks</button>
-                            <button type="button" class="btn btn-secondary" onclick="setTime(4,'w')">1 Month</button>
-                          </div>
-                    </div>
-                    <div class="col-3"></div>
+                    <p>After any camera restart reload the page.</p>
+                  </div>
                  
                   </div>
-                
-            </div>
-            <div class="container-fluid ">
-             
-                <div class="row vertical-spacing ">
-                  <div class="col-sm"></div>
-                  <div class="col-sm countour-spacing">
+                  <div class="col-sm-2">
                     
                     
+                 
                   </div>
-                  <div class="col-sm"></div>
                 </div>
-                <div class="row vertical-spacing ">
-          
-                         
-          
-                          <div class="col-sm-6 ">
-                              <div  id="humidity">
-                                  <!-- Append graph here -->
-                                </div>
-                             
-                          </div>
-                          <div class="col-sm-6 ">
-                            <div id="temperature">
-                                <!-- Append graph here -->
-                              </div>
-                           
-                        </div>
-                  
+              </div>
+             
+              
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="col-sm-2"></div>
+                  <div class="col-sm-8">
+                    
+                    
+                    
+                    
+                    <div class="text-center">
+                      <h3 class="mt-5">Camera Inspector - Demo</h3>
+                      <img src="http://localhost:23244/video_feed1" class="img-fluid" alt="Responsive image" id="camerabox">
+                    </div>
+                 
+                  </div>
+                  <div class="col-sm-2">
+                    
+                    
+                 
+                  </div>
                 </div>
-            </div>
-    
-        
-        
-            <div class="container">
-                <!-- About Section Heading-->
-                <h2 id="batteryindicator"  class="page-section-heading text-center text-uppercase text-white vertical-double-spacing " >Device Battery Left:</h2>
-                
-            </div>
+              </div>
+              
+              </div>
+            
 
     </header>
              <!-- Footer-->
@@ -203,13 +185,13 @@
         </div>
        
         <!-- Bootstrap core JS-->
-        <script src="libs/jquery-3.4.1.min.js"></script>
-        <script src="libs/bootstrap-4.4.1-dist/js/bootstrap.bundle.js"></script>
+        <script src="../libs/jquery-3.4.1.min.js"></script>
+        <script src="../libs/bootstrap-4.4.1-dist/js/bootstrap.bundle.js"></script>
         <!-- Third party plugin JS-->
        
         <!-- Contact form JS-->
-        <script src="assets/mail/jqBootstrapValidation.js"></script>
-        <script src="assets/mail/contact_me.js"></script>
+        <script src="../assets/mail/jqBootstrapValidation.js"></script>
+        <script src="../assets/mail/contact_me.js"></script>
     
     </body>
 </html>

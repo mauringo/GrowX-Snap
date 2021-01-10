@@ -1,5 +1,5 @@
 name: growx
-version: '1.0'
+version: '1.1'
 base: core18
 summary: GrowX the Opensource Greenhouse monitoring App
 description: |
@@ -22,8 +22,11 @@ description: |
 
       1 - install growx
         "sudo snap install growx"
-      2 -connect if needed the proper interface
+      2 -connect if needed the proper interfaces
+         to use bluetooth
          "sudo snap connect growx:bluetooth-control"
+         to use webcamera
+         "sudo snap connect growx:camera"
       3- follow the youtube video:https://youtu.be/ZJ3xdABL6ic
       
 confinement: strict
@@ -36,6 +39,15 @@ apps:
     command: bin/desktop-launch
     plugs:
       - desktop
+
+
+
+  camera-server:
+    command: sh $SNAP/bin/runcamera.sh
+    plugs: [network, network-bind, mount-observe, network-observe, camera, system-observe, bluetooth-control, joystick, x11]
+    daemon: simple
+    environment:
+       "LD_LIBRARY_PATH": "$LD_LIBRARY_PATH:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/lapack:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/blas"
 
   webserver: 
     command: bin/runserver.sh 
@@ -81,6 +93,12 @@ apps:
 
 parts:
 
+
+  ai:
+    plugin: nil
+    stage-packages:
+      - python3-numpy
+      - python3-opencv
 
   pymongo-part:
     plugin: python
